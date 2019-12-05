@@ -8,7 +8,7 @@ Created on Mon Dec  2 20:09:03 2019
 from tkinter import * 
 import numpy as np
 from random import *
-import ProjetMOGPL as st
+import strategies as st
 
 #============== Contre Ordinateur
 
@@ -19,7 +19,8 @@ score_val=0
 score_comp_val=100
 result_val=80
 
-tab,strat=st.constructionTableDynamique(N,D)
+P=st.constructionMatrice_P(D)
+tab,strat=st.constructionTableDynamique(N,D,P)
 
 #======================== Fonctions de Controle
 def popup(t1,t2):
@@ -38,6 +39,7 @@ def popup(t1,t2):
     fenetre.wait_window(fenetre)
     
 def start () :
+    BoutonLancer['state']='normal'
     BoutonComp['state']='disabled'
     BoutonRestart['text']="Restart"
     global D
@@ -72,6 +74,7 @@ def throw() :
     result.set(str(g))
     score.set(str(s))
     global N
+    BoutonLancer['state']='disabled'
     for child in Choix_Frame.winfo_children():
         if child.winfo_class() == 'Radiobutton':
             child['state'] = 'disabled'
@@ -102,6 +105,7 @@ def computer():
     s=int(score_comp.get())+g
     result.set(str(g))
     score_comp.set(str(s))
+    BoutonLancer['state']='normal'
     for child in Choix_Frame.winfo_children():
         if child.winfo_class() == 'Radiobutton':
             child['state'] = 'active'
@@ -155,7 +159,7 @@ Control_Frame=Frame(fenetre, width=440, height=350,borderwidth=0, relief=GROOVE)
 Control_Frame.pack(side=TOP, padx=1, pady=1)
 Label(Control_Frame,textvariable=result).pack(side=RIGHT,padx=5,pady=5)
 Label(Control_Frame,text="Result : ").pack(side=RIGHT,padx=5,pady=5)
-BoutonLancer = Button(Control_Frame, text ='Throw', command = throw)
+BoutonLancer = Button(Control_Frame, text ='Throw', state='disabled',command = throw)
 BoutonLancer.pack(side = LEFT, padx = 60, pady = 5)
 
 Game_Frame=Frame(fenetre, width=440, height=350,borderwidth=0, relief=GROOVE)
