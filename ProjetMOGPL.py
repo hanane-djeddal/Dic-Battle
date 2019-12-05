@@ -3,19 +3,21 @@
 """
 Created on Fri Nov 22 16:01:40 2019
 
-@author: liticia
+@author: Touzari Liticia
+@author : Djeddal Hanane
 """
 import numpy as np
 from random import *
 import pulp
 
 
-   """
-   Q(d,k) :la probabilité d'obtenir k points en jetant d dés sachant qu'aucun dé n'est tombé sur 1
-   """
-def constructionMatrice_Q(D):
-    Q=np.zeros([D+1,6*(D+1)])
 
+def constructionMatrice_Q(D):
+    """
+    Q(d,k) :la probabilité d'obtenir k points en jetant d dés sachant qu'aucun dé n'est tombé sur 1
+    """
+       
+    Q=np.zeros([D+1,6*(D+1)])
     for k in range(2,7):#d=1
         Q[1][k]=1/5
     for d in range(1,D+1):
@@ -31,10 +33,11 @@ def constructionMatrice_Q(D):
             Q[d][k]=Q[d][k]/5
     return Q
 
-   """
-   P(d,k) :la probabilité qu'un joueur qui lance d dés obtienne k points
-   """
+
 def constructionMatrice_P(D):
+    """
+    P(d,k) :la probabilité qu'un joueur qui lance d dés obtienne k points
+    """
     Q=constructionMatrice_Q(D)
     P=np.zeros([D+1,6*(D+1)])
     for d in range(1,D+1):
@@ -47,11 +50,14 @@ def constructionMatrice_P(D):
             P[d][k]=Q[d][k]*((5/6)**(d))
     return P
 
-   """
-   Strategie Aveugle : retourne le d qui maximise l'esperance de points obtenus 
-   EP(d)= (4*d-1)*((5/6)^(d+1))) +1
-   """
+
+#================================== VARIANTE SEQUENTIELLE
+
 def strategieAveugle(D):
+    """
+    Strategie Aveugle : retourne le d qui maximise l'esperance de points obtenus 
+    EP(d)= (4*d-1)*((5/6)^(d+1))) +1
+    """
     d_opt=0
     EGopt=0
     for d in range(D):
@@ -60,31 +66,39 @@ def strategieAveugle(D):
             d_opt=d+1
             EGopt=EG
     return d_opt 
-#=============================== Programmationdynamique  
+#=========================Programmationdynamique  
 
 
-def constructionTableDynamique(N,D):
-     P=constructionMatrice_P(D)
-     cap=N-1+6*D
-     tab=np.zeros([cap+1,cap+1])
-     strat=[[1]*(cap+1)]*(cap+1)  #une matrice qui, pour un etat i,j, retourne le numbre de dés à jouer
-     for i in range (N,cap+1):
-         for j in range (cap+1):
-             if(i>j):
-                 tab[i][j]=1
-             elif(i==j):
-                 tab[i][j]=0
-             else:
-                 tab[i][j]=-1      
-     for j in range (N,cap+1):
-         for i in range (N):
-             if(i>j):
-                 tab[i][j]=1
-             elif(i==j):
-                 tab[i][j]=0
-             else:
-                 tab[i][j]=-1      
-     for i in range(N-1,-1,-1):
+def constructionTableDynamique(N,D,P):
+
+    """
+    Table dynamique : retourne une table (N-1+6*D)x(N-1+6*D) des
+    -esperances de gain
+      tab[i,j] :l'espérance de gain du joueur 1 dans l'état (i, j) tq
+      etat(i,j) :l'état où le premier joueur a cumulé i points, le deuxième joueur a cumulé j
+      points, et c'est au joueur 1 de jouer
+    -strategie : le nombre de dés à lancer dans l'état (i,j)
+    """
+    cap=N-1+6*D
+    tab=np.zeros([cap+1,cap+1])
+    strat=[[1]*(cap+1)]*(cap+1)  #une matrice qui, pour un etat i,j, retourne le numbre de dés à jouer
+    for i in range (N,cap+1):
+        for j in range (cap+1):
+            if(i>j):
+                tab[i][j]=1
+            elif(i==j):
+                tab[i][j]=0
+            else:
+                tab[i][j]=-1      
+    for j in range (N,cap+1):
+        for i in range (N):
+            if(i>j):
+                tab[i][j]=1
+            elif(i==j):
+                tab[i][j]=0
+            else:
+                tab[i][j]=-1      
+    for i in range(N-1,-1,-1):
         for j in range(N-1,-1,-1):
             t=[0]*D
             for d in range(1,D+1):
@@ -92,19 +106,34 @@ def constructionTableDynamique(N,D):
                     t[d-1]+=(P[d][k]*tab[j][i+k])
             strat[i][j]=t.index(min(t))+1
             tab[i][j]=-min(t)
-     return tab,strat
+    return tab,strat
 
 
 def strategieOptimale(i,j,strat):
+    """
+    strategie Optimale : le nombre de dés à lancer dans l'état (i,j)
+    """
     return int(strat[i][j])
 
+
 def strategieAleatoire(D):
+    """
+    strategie aleatoire : un nombre aleatoire de dés à lancer.
+    """
     return randint(1, D)
 
+
 def simulation(N,D):
+    """
+        Simulation de 4 parties du jeu 
+        [aveugle-aveugle, aveugle-optimale] [optimale-aveugle, optimale-optimale]
+        retourne une matrice de gagnant dans chaque partie
+    """
     #0: Strategie aveugle, 1:stratégie optimale
+    
+    P=constructionMatrice_P(D)
     result=np.empty([2,2])
-    tab,strat=constructionTableDynamique(N,D)
+    tab,strat=constructionTableDynamique(N,D,P)
     for a in range (2):
         for b in range(2):
             print("============== Nouvelle Partie: N=",N,' D=',D )
@@ -163,8 +192,12 @@ def simulation(N,D):
                 print("Joueur 1 gagne")
                 result[a][b]=1
     return result
-    
+
+   
 def simulationGain(strat,N,D,s1,s2):
+    """
+    Simulation d'une partie du jeu, retourne le gain de chaque joueur
+    """ 
     #s1,s2= 0: Strategie aveugle, 1:stratégie optimale 2:stratégie aléatoire
     g1=0
     g2=0
@@ -211,7 +244,11 @@ def simulationGain(strat,N,D,s1,s2):
               
             
 def calculEsperanceGain_D(N,D):
-    gain,tab=constructionTableDynamique(N,D)
+    """
+    Calcul d'espérance de gain en variant D
+    """
+    P=constructionMatrice_P(D)
+    gain,tab=constructionTableDynamique(N,D,P)
     nb_parties=10
     A_O_1=[]
     A_O_2=[]
@@ -263,7 +300,7 @@ def calculEsperanceGain_D(N,D):
         print("D :",d)
         print("Esperance de gain du joueur 1 (aveugle) : ",G1/nb_parties)
         print("Esperance de gain du joueur 2 (aveugle) : ",G2/nb_parties)
-        A_A_2.append(G1/nb_parties)
+        A_A_1.append(G1/nb_parties)
         A_A_2.append(G2/nb_parties)
     print("\n optimale vs optimale")
     G1=0
@@ -309,7 +346,12 @@ def calculEsperanceGain_D(N,D):
     
     return A_O_1, A_O_2, O_A_1, O_A_2, A_A_1, A_A_2, O_O_1, O_O_2, A_R_1, A_R_2, R_O_1, R_O_2
 
+
+
 def calculEsperanceGain_N(D):
+    """
+    Calcul d'espérance de gain en variant N
+    """
     A_O_1=[]
     A_O_2=[]
     O_A_1=[]
@@ -323,8 +365,9 @@ def calculEsperanceGain_N(D):
     R_O_1=[]
     R_O_2=[]
     nb_parties=20
+    P=constructionMatrice_P(D)
     for n in range(50,250,50): 
-        gain,tab=constructionTableDynamique(n,D)
+        gain,tab=constructionTableDynamique(n,D,P)
         print("aveugle vs optimale")
         G1=0
         G2=0
@@ -332,7 +375,7 @@ def calculEsperanceGain_N(D):
             g1,g2=simulationGain(tab,n,D,0,1)
             G1+=g1
             G2+=g2
-        print("N :",n)
+        print("N :",n,", D :",D )
         print("Esperance de gain du joueur 1 (aveugle) : ",G1/nb_parties)
         print("Esperance de gain du joueur 2 (optimale) : ",G2/nb_parties)
         A_O_1.append(G1/nb_parties)
@@ -345,7 +388,7 @@ def calculEsperanceGain_N(D):
             g1,g2=simulationGain(tab,n,D,1,0)
             G1+=g1
             G2+=g2
-        print("N :",n)
+        print("N :",n,", D :",D )
         print("Esperance de gain du joueur 1 (optimale) : ",G1/nb_parties)
         print("Esperance de gain du joueur 2 (aveugle) : ",G2/nb_parties)
         O_A_1.append(G1/nb_parties)
@@ -358,10 +401,10 @@ def calculEsperanceGain_N(D):
             g1,g2=simulationGain(tab,n,D,0,0)
             G1+=g1
             G2+=g2
-        print("N :",n)
+        print("N :",n,", D :",D )
         print("Esperance de gain du joueur 1 (aveugle) : ",G1/nb_parties)
         print("Esperance de gain du joueur 2 (aveugle) : ",G2/nb_parties)
-        A_A_2.append(G1/nb_parties)
+        A_A_1.append(G1/nb_parties)
         A_A_2.append(G2/nb_parties)
         
         print("\n optimale vs optimale")
@@ -371,7 +414,7 @@ def calculEsperanceGain_N(D):
             g1,g2=simulationGain(tab,n,D,1,1)
             G1+=g1
             G2+=g2
-        print("N :",n)
+        print("N :",n,", D :",D )
         print("Esperance de gain du joueur 1 (optimale) : ",G1/nb_parties)
         print("Esperance de gain du joueur 2 (optimale) : ",G2/nb_parties)
         O_O_1.append(G1/nb_parties)
@@ -384,7 +427,7 @@ def calculEsperanceGain_N(D):
             g1,g2=simulationGain(tab,n,D,2,1)
             G1+=g1
             G2+=g2
-        print("N :",n)
+        print("N :",n,", D :",D )
         print("Esperance de gain du joueur 1 (random) : ",G1/nb_parties)
         print("Esperance de gain du joueur 2 (optimale) : ",G2/nb_parties)
         R_O_1.append(G1/nb_parties)
@@ -397,7 +440,7 @@ def calculEsperanceGain_N(D):
             g1,g2=simulationGain(tab,n,D,2,1)
             G1+=g1
             G2+=g2
-        print("N :",n)
+        print("N :",n,", D :",D )
         print("Esperance de gain du joueur 1 (aveugle) : ",G1/nb_parties)
         print("Esperance de gain du joueur 2 (random) : ",G2/nb_parties)
         A_R_1.append(G1/nb_parties)
@@ -406,9 +449,13 @@ def calculEsperanceGain_N(D):
     
     return A_O_1, A_O_2, O_A_1, O_A_2, A_A_1, A_A_2, O_O_1, O_O_2, A_R_1, A_R_2, R_O_1, R_O_2 
 
-#====================Variante simultanée
-    
+#================================== VARIANTE SIMULTANÉE SIMPLE
+
+   
 def constructionEG(D,P):
+    """
+     Retourne la table d'espérances de gain 
+    """ 
     EG=np.zeros([D+1,D+1])
     for i in range(1,D+1):
         for j in range(1,D+1):
@@ -421,7 +468,11 @@ def constructionEG(D,P):
             EG[i][j]=e1-e2
     return EG
 
+
 def resolutionPL(D,EG):
+    """
+    Modélisation e résolution du programme linéaire 
+    """ 
     p1=[0]*D
     my_lp_problem = pulp.LpProblem("My_LP_Problem", pulp.LpMaximize)
     z = pulp.LpVariable('z', cat='Continuous')
@@ -450,13 +501,23 @@ def resolutionPL(D,EG):
         #print ("{} = {}".format(variable.name, variable.varValue))
         L.append(variable.varValue)
     return L
+
+
 def strategieSimultane(D):
+    """
+    stratégie avec la résolution d'un programme linaire 
+    """ 
     P=constructionMatrice_P(D)
     EG=constructionEG(D,P)
     p=resolutionPL(D,EG)
     return p.index(max(p))+1
 
+
+
 def test_S_vs_A(D):
+    """
+    Evaluation de l'espérance de gain 
+    """
     G1=0
     G2=0
     for i in range(100):
@@ -484,9 +545,12 @@ def test_S_vs_A(D):
             G2+=1
     return(G1/100, G2/100)
 
-#====================Variante simultanée "Facultatif"   
+#================================== VARIANTE SIMULTANÉE GÉNÉRALE  
 
 def construction_Eij(D,EG,P,i,j):
+    """
+    L'espérance de gain E(i, j) du joueur 1 etant donné l'état (i,j) en fonction de d1, d2 et EG1
+    """
     E=np.zeros([D+1,D+1])
     for d1 in range(1,D+1):
         for d2 in range(1,D+1):
@@ -495,7 +559,11 @@ def construction_Eij(D,EG,P,i,j):
                     E[d1][d2]+=P[d1][k1]*P[d2][k2]*EG[i+k1][j+k2]
     return E
 
+
 def construction_EG_General(N,D,P):
+    """
+    Table dynamique : retourne une table (N-1+6*D)x(N-1+6*D) des esperances de gain du joeur 1
+    """
     cap=N-1+6*D
     EG=np.zeros([cap+1,cap+1])
     strat=[[1]*(cap+1)]*(cap+1)
@@ -526,10 +594,20 @@ def construction_EG_General(N,D,P):
             strat[i][j]=p.index(max(p))+1
     return EG,strat
 
+
+
 def strategieSimultaneGeneral(i,j,strat):
+    """
+    strategie Optimale : le nombre de dés à lancer dans l'état (i,j)
+    """
     return int(strat[i][j])
 
+
+ 
 def simulationGainSimultane(stratSim, stratSeq,N,D,s1,s2):
+    """
+    Simulation d'une partie du jeu simultané, retourne le gain de chaque joueur
+    """ 
     #s1,s2= 0: Strategie aveugle, 1:stratégie optimale Simultane 2:stratégie optimale Sequentielle
     g1=0
     g2=0
@@ -567,7 +645,13 @@ def simulationGainSimultane(stratSim, stratSeq,N,D,s1,s2):
     if (g1>g2):
         joueur1=1
     return joueur1, joueur2
+
+
+
 def calculEsperanceGainGeneral_N(D):
+    """
+    Evaluation de l'espérance de gain en variant N
+    """
     O_O=[]
     O_A=[]
     O_OSeq=[]
@@ -575,7 +659,7 @@ def calculEsperanceGainGeneral_N(D):
     nb_parties=20
     for n in range(5,160,20): 
         EGSim,stratSim=construction_EG_General(n,D,P)
-        EGSeq,stratSeq=constructionTableDynamique(n,D)
+        EGSeq,stratSeq=constructionTableDynamique(n,D,P)
         
         print("Optimale  vs Optimale")
         G1=0
@@ -584,7 +668,7 @@ def calculEsperanceGainGeneral_N(D):
             g1,g2=simulationGainSimultane(stratSim,[],n,D,1,1)
             G1+=g1
             G2+=g2
-        print("N :",n)
+        print("N :",n,", D :",D )
         print("Esperance de gain du joueur 1 (Optimale) : ",G1/nb_parties)
         print("Esperance de gain du joueur 2 (Optimale) : ",G2/nb_parties)
         O_O.append(G1/nb_parties)
@@ -596,7 +680,7 @@ def calculEsperanceGainGeneral_N(D):
             g1,g2=simulationGainSimultane(stratSim,[],n,D,1,0)
             G1+=g1
             G2+=g2
-        print("N :",n)
+        print("N :",n,", D :",D )
         print("Esperance de gain du joueur 1 (optimale) : ",G1/nb_parties)
         print("Esperance de gain du joueur 2 (aveugle) : ",G2/nb_parties)
         O_A.append(G1/nb_parties)
@@ -608,36 +692,43 @@ def calculEsperanceGainGeneral_N(D):
             g1,g2=simulationGainSimultane(stratSim, stratSeq,n,D,1,2)
             G1+=g1
             G2+=g2
-        print("N :",n)
+        print("N :",n,", D :",D )
         print("Esperance de gain du joueur 1 (Optimale) : ",G1/nb_parties)
-        print("Esperance de gain du joueur 2 (SEquentielle optimale) : ",G2/nb_parties)
+        print("Esperance de gain du joueur 2 (Sequentielle optimale) : ",G2/nb_parties)
         O_OSeq.append(G1/nb_parties)
         
         
     return O_O, O_A,O_OSeq 
 
-"""_________________________TESTS_______________________________"""   
-N=20
-D=5
-#tab,strat=constructionTableDynamique(N,D)
+
+
+"""____________________________M A I N_______________________________"""   
+N=50
+D=10
+
+#_____________Prg Dynamique Séquentielle
+P=constructionMatrice_P(D)
+tab,strat=constructionTableDynamique(N,D,P)
 
 #print(strat)
 #print(strategieAveugle(D))
-#EGD,strat=constructionTableDynamique(N,D)
-#print(strategieOptimale(N,D,97,20,tab)) 
-#print(calculEsperanceGain_N(D))
+#print(strategieOptimale(80,3,strat)) 
+
+#_____________Simulation Séquentielle
 #print(simulation(N,D))
+#print(calculEsperanceGain_N(D))
 
-#P=constructionMatrice_P(D)
+
+#_____________Prg linéaire Simultanée
 #EG=constructionEG(D,P)
-
 #print(resolutionPL(D,EG))
 
-#print(test_S_vs_A(D))
+#_____________Simulation Simultanée
+#g1,g2=test_S_vs_A(D)
+#print("Esperance du gain Joeur 1 (optimale) :",g1, ". Esperance du gain Joeur 2 (aveugle) :",g2)
+
+
+#_____________Prg Dynamique Simultanée
 #EG2,strat=construction_EG_General(N,D,P)
-calculEsperanceGainGeneral_N(D)
-"""
-for d in range(1,21):
-    print("D = ",d," d_opt = ",strategieSimultane(d))
-"""
-#print(construction_Eij(D,EGD,P,30,25))
+evalEG=calculEsperanceGainGeneral_N(D)
+print(evalEG)
