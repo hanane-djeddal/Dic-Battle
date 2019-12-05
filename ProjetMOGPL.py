@@ -118,7 +118,7 @@ def constructionTableDynamique(N,D):
                     #tab[i][j][d]+= (1-(sum(tab[j+k][i])/d))*P[d][k]
                     tab[i][j][d]+= (-sum(tab[j+k][i])/d)*(1-P[d][k])+(P[d][k])*(sum(tab[j+k][i])/d)
      return tab
-print(constructionTableDynamique(100,10))
+ 
 def strategieOptimale(N,D,i,j,tab):
     l=(list(tab[i][j]))
     d=l.index(max(l))
