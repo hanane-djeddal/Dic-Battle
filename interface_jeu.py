@@ -72,11 +72,11 @@ def throw() :
     result.set(str(g))
     score.set(str(s))
     global N
-    if (s>= N):
-        popup("Hoory!", "You Won. :D")
     for child in Choix_Frame.winfo_children():
         if child.winfo_class() == 'Radiobutton':
             child['state'] = 'disabled'
+    if (s>= N):
+        popup("Hoory!", "You Won. :D")
    
     #----------Computer Turn
 def computer():
@@ -86,7 +86,6 @@ def computer():
             child['state'] = 'disabled'       
     global tab
     d2=st.strategieOptimale(N,D,int(score_comp.get()),int(score.get()),tab)
-    print(d2)
     som=True
     g=0
     for k in range (d2):
@@ -103,11 +102,11 @@ def computer():
     s=int(score_comp.get())+g
     result.set(str(g))
     score_comp.set(str(s))
-    if (s>= N):
-        popup("Ooops!", "The Computer won. :/")
     for child in Choix_Frame.winfo_children():
         if child.winfo_class() == 'Radiobutton':
             child['state'] = 'active'
+    if (s>= N):
+        popup("Ooops!", "The Computer won. :/")
     
 fenetre = Tk()
 fenetre.geometry('450x400')
@@ -172,7 +171,7 @@ Result_Frame.pack(side=RIGHT, padx=1, pady=1)
 Label(Choix_Frame,text="Choose your dice").pack(side=TOP,padx=5,pady=5)
 
 d = StringVar()
-dice = {"1 Dices" : "1", 
+dice = {"1 Dice" : "1", 
           "2 Dice" : "2", 
           "3 Dice" : "3", 
           "4 Dice" : "4", 
