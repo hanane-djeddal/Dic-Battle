@@ -1,0 +1,5 @@
+\contentsline {chapter}{\numberline {1}Introduction}{2}
+\contentsline {paragraph}{}{2}
+\contentsline {chapter}{\numberline {2}Description du jeu}{3}
+\contentsline {paragraph}{}{3}
+\contentsline {chapter}{\numberline {3}Probabilite}{3}

@@ -19,7 +19,7 @@ score_val=0
 score_comp_val=100
 result_val=80
 
-tab=st.constructionTableDynamique(N,D)
+tab,strat=st.constructionTableDynamique(N,D)
 
 #======================== Fonctions de Controle
 def popup(t1,t2):
@@ -85,7 +85,7 @@ def computer():
         if child.winfo_class() == 'Radiobutton':
             child['state'] = 'disabled'       
     global tab
-    d2=st.strategieOptimale(N,D,int(score_comp.get()),int(score.get()),tab)
+    d2=st.strategieOptimale(int(score_comp.get()),int(score.get()),strat)
     som=True
     g=0
     for k in range (d2):
