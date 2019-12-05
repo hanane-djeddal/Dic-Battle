@@ -7,7 +7,7 @@ Created on Fri Nov 22 16:01:40 2019
 """
 import numpy as np
 from random import *
-#
+import pulp
 
 def constructionMatrice_Q(D):
     Q=np.zeros([D+1,6*(D+1)])
@@ -47,48 +47,10 @@ def strategieAveugle(D):
         if(EGopt<EG):
             d_opt=d+1
             EGopt=EG
-    return d_opt   
-"""def constructionTableDynamique(N,D):
-     cap=N-1+6*D
-     tab=np.zeros([cap,cap,D])
-     for i in range (N-1,cap):
-         for j in range (cap):
-             for d in range(0,D):#On considere que 0 vaut 1 dé
-                 if(i>j):
-                     tab[i][j][d]=1
-                 elif(i==j):
-                     tab[i][j][d]=0
-                 else:
-                     tab[i][j][d]=-1            
-     for i in range(N-2,-1,-1):
-        for j in range(cap-1,-1,-1):
-            for d in range(0,D):
-                for k in range(i+1,i+6*(d+1)):
-                    tab[i][j][d]+=tab[k][j][d]
-                tab[i][j][d]=(tab[i][j][d])*((5/6)**d)+(1-((5/6)**d))
-     
-     return tab"""
-"""     
-def constructionTableDynamique(N,D):
-     cap=N-1+6*D
-     tab=np.zeros([cap,cap,D])
-     for i in range (N-1,cap):
-         for j in range (cap):
-             for d in range(0,D):#On considere que 0 vaut 1 dé
-                 if(i>j):
-                     tab[i][j][d]=1
-                 elif(i==j):
-                     tab[i][j][d]=0
-                 else:
-                     tab[i][j][d]=-1            
-     for i in range(N-2,-1,-1):
-        for j in range(cap-1,-1,-1):
-            for d in range(0,D):
-                for k in range(i+1,i+6*(d+1)):
-                    tab[i][j][d]+=((tab[k][j][d])*((5/6)**d)-(1-((5/6)**d)))
-                tab[i][j][d]=tab[i][j][d]
-     return tab   """
-def constructionTableDynamique(N,D):
+    return d_opt 
+#=============================== Programmationdynamique  
+
+def constructionTableDynamique2(N,D):
      P=constructionMatrice_P(D)
      cap=N-1+6*D
      tab=np.zeros([cap+1,cap+1,D+1])
@@ -115,43 +77,52 @@ def constructionTableDynamique(N,D):
             for d in range(1,D+1):
                 t=0
                 for k in range(1,6*d+1):
-                    #tab[i][j][d]+= (1-(sum(tab[j+k][i])/d))*P[d][k]
-                    tab[i][j][d]+= (-sum(tab[j+k][i])/d)*(1-P[d][k])+(P[d][k])*(sum(tab[j+k][i])/d)
+                    tab[i][j][d]+= -(sum(tab[j][i+k])/D)*P[d][k]
+                    
      return tab
- 
-def strategieOptimale(N,D,i,j,tab):
-    l=(list(tab[i][j]))
-    d=l.index(max(l))
-    return d+1
-def strategieAleatoire(D):
-    return randint(1, D)
- 
-"""def constructionTableDynamique(N,D):
+
+def constructionTableDynamique(N,D):
+     P=constructionMatrice_P(D)
      cap=N-1+6*D
-     tab=np.zeros([cap,cap])
-     for i in range (N-1,cap):
-         for j in range (cap):
+     tab=np.zeros([cap+1,cap+1])
+     strat=[[1]*(cap+1)]*(cap+1)
+     for i in range (N,cap+1):
+         for j in range (cap+1):
              if(i>j):
                  tab[i][j]=1
-             else:
+             elif(i==j):
                  tab[i][j]=0
-     for i in range(N-2,-1,-1):
-        for j in range(cap-1,-1,-1):
-            for k in range(i+1,(i+6*D)):
-                tab[i][j]+=tab[k][j]
-            tab[i][j]=tab[i][j]/(6*D)
-     return tab
- 
-def strategieOptimale(N,D,i,j,tab):
-    l=(list(tab[:,j]))
-    g=l.index(max(l))
-    return int((g-i)/6)+1
-"""
+             else:
+                 tab[i][j]=-1      
+     for j in range (N,cap+1):
+         for i in range (N):
+             if(i>j):
+                 tab[i][j]=1
+             elif(i==j):
+                 tab[i][j]=0
+             else:
+                 tab[i][j]=-1      
+     for i in range(N-1,-1,-1):
+        for j in range(N-1,-1,-1):
+            t=[0]*D
+            for d in range(1,D+1):
+                for k in range(1,6*d+1):
+                    t[d-1]+=(P[d][k]*tab[j][i+k])
+            strat[i][j]=t.index(min(t))+1
+            tab[i][j]=-min(t)
+     return tab,strat
+
+
+def strategieOptimale(i,j,strat):
+    return int(strat[i][j])
+
+def strategieAleatoire(D):
+    return randint(1, D)
 
 def simulation(N,D):
     #0: Strategie aveugle, 1:stratégie optimale
     result=np.empty([2,2])
-    tab=constructionTableDynamique(N,D)
+    tab,strat=constructionTableDynamique(N,D)
     for a in range (2):
         for b in range(2):
             print("============== Nouvelle Partie: N=",N,' D=',D )
@@ -167,13 +138,13 @@ def simulation(N,D):
             g2=0
             while ((g1< N) and (g2<N)):
                 if (a == 0):
-                    #print("Joueur 1 aveugle :")
+                    print("Joueur 1 aveugle :")
                     d1=strategieAveugle(D)
                 else :
-                    #print("Joueur 1 optimale :")
-                    d1=strategieOptimale(N,D,g1,g2,tab)
+                    print("Joueur 1 optimale :")
+                    d1=strategieOptimale(g1,g2,strat)
+                g=0
                 for k in range (d1):
-                    g=0
                     r=randint(1,6)
                     if (r == 1):
                         g=1
@@ -181,15 +152,17 @@ def simulation(N,D):
                     else:
                         g+=r
                 g1+=g
-                #print("Tour Joueur 1, lance : ",d1," dés, gain :",g1 )
+                print("Tour Joueur 1, lance : ",d1," dés, gain :",g1 )
                 if (b == 0):
-                    #print("Joueur 2 aveugle :")
+                    print("Joueur 2 aveugle :")
                     d2=strategieAveugle(D)
+                    
                 else :
-                    #print("Joueur 2 optimale :")
-                    d2=strategieOptimale(N,D,g2,g1,tab)
+                    print("Joueur 2 optimale :")
+                    d2=strategieOptimale(g2,g1,strat)
+                g=0
                 for k in range (d2):
-                    g=0
+                    
                     r=randint(1,6)
                     if (r == 1):
                         g=1
@@ -197,7 +170,7 @@ def simulation(N,D):
                     else:
                         g+=r
                 g2+=g
-                #print("Tour Joueur 2, lance : ",d2," dés, gain :",g2 )
+                print("Tour Joueur 2, lance : ",d2," dés, gain :",g2 )
             if (g1==g2):
                 result[a][b]=0
                 print("Nulle")
@@ -209,18 +182,18 @@ def simulation(N,D):
                 result[a][b]=1
     return result
     
-def simulationGain(tab,N,D,s1,s2):#s1,s2= 0: Strategie aveugle, 1:stratégie optimale 2:stratégie aléatoire
+def simulationGain(strat,N,D,s1,s2):#s1,s2= 0: Strategie aveugle, 1:stratégie optimale 2:stratégie aléatoire
     g1=0
     g2=0
     while ((g1< N) and (g2<N)):
         if(s1 == 0):
             d1=strategieAveugle(D)
         if(s1 == 1):
-            d1=strategieOptimale(N,D,g1,g2,tab)
+            d1=strategieOptimale(g1,g2,strat)
         if(s1 == 2):
             d1=strategieAleatoire(D)
+        g=0
         for k in range (d1):
-            g=0
             r=randint(1,6)
             if (r == 1):
                 g=1
@@ -232,11 +205,11 @@ def simulationGain(tab,N,D,s1,s2):#s1,s2= 0: Strategie aveugle, 1:stratégie opt
         if(s2 == 0):
             d2=strategieAveugle(D)
         if(s2 ==1 ) :
-            d2=strategieOptimale(N,D,g2,g1,tab)
+            d2=strategieOptimale(g2,g1,strat)
         if(s2 == 2):
             d2=strategieAleatoire(D)
+        g=0
         for k in range (d2):
-            g=0
             r=randint(1,6)
             if (r == 1):
                 g=1
@@ -255,7 +228,7 @@ def simulationGain(tab,N,D,s1,s2):#s1,s2= 0: Strategie aveugle, 1:stratégie opt
               
             
 def calculEsperanceGain_D(N,D):
-    tab=constructionTableDynamique(N,D)
+    gain,tab=constructionTableDynamique(N,D)
     nb_parties=10
     A_O_1=[]
     A_O_2=[]
@@ -366,9 +339,9 @@ def calculEsperanceGain_N(D):
     A_R_2=[]
     R_O_1=[]
     R_O_2=[]
-    nb_parties=10
+    nb_parties=20
     for n in range(50,250,50): 
-        tab=constructionTableDynamique(n,D)
+        gain,tab=constructionTableDynamique(n,D)
         print("aveugle vs optimale")
         G1=0
         G2=0
@@ -450,24 +423,114 @@ def calculEsperanceGain_N(D):
     
     return A_O_1, A_O_2, O_A_1, O_A_2, A_A_1, A_A_2, O_O_1, O_O_2, A_R_1, A_R_2, R_O_1, R_O_2 
 
-
+#====================Variante simultanée
     
+def constructionEG(D,P):
+    EG=np.zeros([D+1,D+1])
+    for i in range(1,D+1):
+        for j in range(1,D+1):
+            e1=0
+            e2=0
+            for k in range(1,(i*6)+1):
+                e1+=P[i][k]*k
+            for k in range(1,(j*6)+1):
+                e2+=P[j][k]*k
+            EG[i][j]=e1-e2
+    return EG
+
+def resolutionPL(D,EG):
+    p1=[0]*D
+    my_lp_problem = pulp.LpProblem("My_LP_Problem", pulp.LpMaximize)
+    z = pulp.LpVariable('z', cat='Continuous')
+    for i in range(D):
+        p1[i]=pulp.LpVariable('p'+str(i+1), lowBound=0, cat='Continuous')
+    
+    # Objective function
+    my_lp_problem += z, "Z"
+    # Constraints
+    for j in range(1,D+1):
+        #my_lp_problem += 0 <= p1[i-1]
+        c= p1[0] * EG[1][j]
+        for i in range(2,D+1):
+            c+= + p1[i-1] * EG[i][j]
+        my_lp_problem += z <= c   
+    c=p1[0]
+    for i in range(1,D):
+        c+= + p1[i] 
+    my_lp_problem += c <= 1
+    my_lp_problem += c >= 1
+    
+    my_lp_problem.solve()
+    pulp.LpStatus[my_lp_problem.status]
+    L=[]
+    for variable in my_lp_problem.variables():
+        #print ("{} = {}".format(variable.name, variable.varValue))
+        L.append(variable.varValue)
+    return L
+def strategieSimultane(D):
+    P=constructionMatrice_P(D)
+    EG=constructionEG(D,P)
+    p=resolutionPL(D,EG)
+    return p.index(max(p))+1
+
+def test_S_vs_A(D):
+    G1=0
+    G2=0
+    for i in range(100):
+        d1=strategieSimultane(D)#nb des du joueur 1
+        d2=strategieAveugle(D)#nb des du joueur 2
+        g1=0
+        for k in range (d1):
+            r=randint(1,6)
+            if (r == 1):
+                g=1
+                break
+            else:
+                g1+=r
+        g2=0
+        for k in range (d2):
+            r=randint(1,6)
+            if (r == 1):
+                g2=1
+                break
+            else:
+                g2+=r
+        if(g1>g2):
+            G1+=1
+        else:
+            G2+=1
+    return(G1/100, G2/100)
+
+#====================Variante simultanée "Facultatif"   
+
+def construction_Eij(D,EG,P,i,j):
+    E=np.zeros([D+1,D+1])
+    for d1 in range(1,D+1):
+        for d2 in range(1,D+1):
+            for k1 in range(1,6*d1+1):
+                for k2 in range(1,6*d2+1):
+                    E[d1][d2]+=P[d1][k1]*P[d2][k2]**EG[i+k1][j+k2]
+    return E
 """_________________________TESTS_______________________________"""   
-N=200
+N=50
 D=5
-#tab=constructionTableDynamique(N,D)
-#print(tab)
+#tab,strat=constructionTableDynamique(N,D)
+
+#print(strat)
 #print(strategieAveugle(D))
-#print(constructionTableDynamique(5,1))
+EGD,strat=constructionTableDynamique(N,D)
 #print(strategieOptimale(N,D,97,20,tab)) 
 #print(calculEsperanceGain_N(D))
-
 #print(simulation(N,D))
 
+P=constructionMatrice_P(D)
+#EG=constructionEG(D,P)
 
+#print(resolutionPL(D,EG))
 
-
-
-
-
-
+#print(test_S_vs_A(D))
+"""
+for d in range(1,21):
+    print("D = ",d," d_opt = ",strategieSimultane(d))
+"""
+print(construction_Eij(D,EGD,P,30,25))
