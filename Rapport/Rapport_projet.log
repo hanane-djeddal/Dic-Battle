@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.10.7)  5 DEC 2019 14:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.10.7)  6 DEC 2019 18:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -601,26 +601,192 @@ l.106 ...let\clearpage\relax \chapter{Probabilite}
                                                   }   %COPY ME TO ADD A CHAP...
 
 ? 
+Chapter 4.
+! Undefined control sequence.
+\@makechapterhead ...mdepth >\m@ne \if@mainmatter 
+                                                  \Huge \bfseries \thechapte...
+l.107 ...ge\relax \chapter{Variante Séquentielle}
+                                                  }
+? 
+! Extra \fi.
+\@chapter ...kechapterhead {#2}\@afterheading \fi 
+                                                  
+l.107 ...ge\relax \chapter{Variante Séquentielle}
+                                                  }
+? 
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.117     L
+           e jeu étant à somme nulle, l'espérance de gain du joueur 1 est...
+
+? 
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 119.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 119.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 119.
+
+Underfull \hbox (badness 10000) in paragraph at lines 117--125
+
+ []
+
 [3
 
-] (./Rapport_projet.aux) ) 
+]
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.135     C
+           ette approche permet de trouver la stratégie optimale dans chaqu...
+
+? 
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.144     \underline
+                    {Stratégie aveugle:}\\
+? 
+
+Underfull \hbox (badness 10000) in paragraph at lines 144--151
+
+ []
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.152     O
+           n calcule l'espérance de gain :\\
+? 
+
+Underfull \hbox (badness 10000) in paragraph at lines 152--155
+
+ []
+
+! Undefined control sequence.
+l.156     \subfloat
+                   {{\includegraphics[width=7cm]{Na_a.png} }}%
+? 
+<Na_a.png, id=28, 398.48875pt x 281.05pt>
+File: Na_a.png Graphic file (type png)
+<use Na_a.png>
+Package pdftex.def Info: Na_a.png  used on input line 156.
+(pdftex.def)             Requested size: 199.16928pt x 140.47318pt.
+! Undefined control sequence.
+l.158     \subfloat
+                   {{\includegraphics[width=7cm]{Na_o.png} }}%
+? 
+<Na_o.png, id=29, 400.49625pt x 280.04625pt>
+File: Na_o.png Graphic file (type png)
+<use Na_o.png>
+Package pdftex.def Info: Na_o.png  used on input line 158.
+(pdftex.def)             Requested size: 199.16928pt x 139.27069pt.
+! Undefined control sequence.
+l.160     \subfloat
+                   {{\includegraphics[width=7cm]{No_o.png} }}%
+? 
+<No_o.png, id=30, 396.48125pt x 280.04625pt>
+File: No_o.png Graphic file (type png)
+<use No_o.png>
+Package pdftex.def Info: No_o.png  used on input line 160.
+(pdftex.def)             Requested size: 199.16928pt x 140.68083pt.
+! Undefined control sequence.
+l.162     \subfloat
+                   {{\includegraphics[width=7cm]{No_a.png} }}%
+? 
+<No_a.png, id=31, 398.48875pt x 288.07625pt>
+File: No_a.png Graphic file (type png)
+<use No_a.png>
+Package pdftex.def Info: No_a.png  used on input line 162.
+(pdftex.def)             Requested size: 199.16928pt x 143.98502pt.
+! Undefined control sequence.
+l.164     \subfloat
+                   {{\includegraphics[width=7cm]{Na_r.png} }}%
+? 
+<Na_r.png, id=32, 399.4925pt x 277.035pt>
+File: Na_r.png Graphic file (type png)
+<use Na_r.png>
+Package pdftex.def Info: Na_r.png  used on input line 164.
+(pdftex.def)             Requested size: 199.16928pt x 138.1198pt.
+! Undefined control sequence.
+l.166     \subfloat
+                   {{\includegraphics[width=7cm]{Nr_o.png} }}%
+? 
+<Nr_o.png, id=33, 398.48875pt x 282.05376pt>
+File: Nr_o.png Graphic file (type png)
+<use Nr_o.png>
+Package pdftex.def Info: Nr_o.png  used on input line 166.
+(pdftex.def)             Requested size: 199.16928pt x 140.97487pt.
+[4 <./Na_a.png> <./Na_o.png>]
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.168     \\[1.5em]
+                   
+? 
+
+Underfull \hbox (badness 10000) in paragraph at lines 169--171
+
+ []
+
+Chapter 5.
+! Undefined control sequence.
+\@makechapterhead ...mdepth >\m@ne \if@mainmatter 
+                                                  \Huge \bfseries \thechapte...
+l.175 ...page\relax \chapter{Variante Simultanée}
+                                                  }
+? 
+! Extra \fi.
+\@chapter ...kechapterhead {#2}\@afterheading \fi 
+                                                  
+l.175 ...page\relax \chapter{Variante Simultanée}
+                                                  }
+? 
+[5 <./No_o.png> <./No_a.png> <./Na_r.png> <./Nr_o.png>] (./Rapport_projet.aux) 
+) 
 Here is how much of TeX's memory you used:
- 2299 strings out of 494923
- 31139 string characters out of 6180742
- 89324 words of memory out of 5000000
- 5593 multiletter control sequences out of 15000+600000
- 6354 words of font info for 23 fonts, out of 8000000 for 9000
+ 2351 strings out of 494923
+ 31730 string characters out of 6180742
+ 92324 words of memory out of 5000000
+ 5632 multiletter control sequences out of 15000+600000
+ 9406 words of font info for 33 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 41i,5n,25p,281b,255s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmc
-sc10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb>
-Output written on Rapport_projet.pdf (4 pages, 100496 bytes).
+ 41i,7n,25p,281b,255s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmsy10.pfb>
+Output written on Rapport_projet.pdf (6 pages, 238088 bytes).
 PDF statistics:
- 41 PDF objects out of 1000 (max. 8388607)
- 26 compressed objects within 1 object stream
+ 79 PDF objects out of 1000 (max. 8388607)
+ 45 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 41 words of extra memory for PDF output out of 10000 (max. 10000000)
 

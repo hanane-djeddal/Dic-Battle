@@ -265,9 +265,10 @@ def calculEsperanceGain_D(N,D):
     R_O_2=[]
     
     print("aveugle vs optimale")
-    G1=0
-    G2=0
+    
     for d in range(1,D+1):
+        G1=0
+        G2=0
         for i in range(nb_parties):
             g1,g2=simulationGain(tab,N,d,0,1)
             G1+=g1
@@ -278,9 +279,10 @@ def calculEsperanceGain_D(N,D):
         A_O_1.append(G1/nb_parties)
         A_O_2.append(G2/nb_parties)
     print("\n optimale vs aveugle")
-    G1=0
-    G2=0
+    
     for d in range(1,D+1):
+        G1=0
+        G2=0
         for i in range(nb_parties):
             g1,g2=simulationGain(tab,N,d,1,0)
             G1+=g1
@@ -291,9 +293,10 @@ def calculEsperanceGain_D(N,D):
         O_A_1.append(G1/nb_parties)
         O_A_2.append(G2/nb_parties)
     print("\n aveugle vs aveugle")
-    G1=0
-    G2=0
+
     for d in range(1,D+1):
+        G1=0
+        G2=0
         for i in range(nb_parties):
             g1,g2=simulationGain(tab,N,d,0,0)
             G1+=g1
@@ -303,10 +306,10 @@ def calculEsperanceGain_D(N,D):
         print("Esperance de gain du joueur 2 (aveugle) : ",G2/nb_parties)
         A_A_1.append(G1/nb_parties)
         A_A_2.append(G2/nb_parties)
-    print("\n optimale vs optimale")
-    G1=0
-    G2=0
+
     for d in range(1,D+1):
+        G1=0
+        G2=0
         for i in range(nb_parties):
             g1,g2=simulationGain(tab,N,d,1,1)
             G1+=g1
@@ -318,9 +321,10 @@ def calculEsperanceGain_D(N,D):
         O_O_2.append(G2/nb_parties)
         
     print("\n random vs optimale")
-    G1=0
-    G2=0
+
     for d in range(1,D+1):
+        G1=0
+        G2=0
         for i in range(nb_parties):
             g1,g2=simulationGain(tab,N,d,2,1)
             G1+=g1
@@ -332,9 +336,10 @@ def calculEsperanceGain_D(N,D):
         R_O_2.append(G2/nb_parties)
         
     print("\n aveugle vs random")
-    G1=0
-    G2=0
+
     for d in range(1,D+1):
+        G1=0
+        G2=0        
         for i in range(nb_parties):
             g1,g2=simulationGain(tab,N,d,0,2)
             G1+=g1
@@ -367,7 +372,7 @@ def calculEsperanceGain_N(D):
     R_O_2=[]
     nb_parties=20
     P=constructionMatrice_P(D)
-    for n in range(50,250,50): 
+    for n in range(50,550,50): 
         gain,tab=constructionTableDynamique(n,D,P)
         print("aveugle vs optimale")
         G1=0

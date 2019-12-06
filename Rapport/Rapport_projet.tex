@@ -104,6 +104,75 @@
   \end{large}
 
   {\let\clearpage\relax \chapter{Probabilite}}   %COPY ME TO ADD A CHAPTER TITLE. :)
+  {\let\clearpage\relax \chapter{Variante Séquentielle}} 
+  \section{Stratégie aveugle}
+  \section{Programmation dynamique}
+  \paragraph{}
+  \begin{large}
+    Dans cette section, on calcule une stratégie en se basant sur la programmation dynamique. Il s'agit 
+    de construire une table EG de dimensions (N-1+6D)x(N-1+6D) resprésentant l'éspérance de gain dans un état (i,j) tel que: 
+    état(i,j) : état où le premier joueur a cumulé i points, le deuxième joueur a cumulé j
+    points, et c'est au joueur 1 de jouer.
+    \paragraph{\large{Formule de récurrence: }} \\
+    Le jeu étant à somme nulle, l'espérance de gain du joueur 1 est égale à (-) l'espérance de gain de son adversaire. Étant un état (i,j),
+    le joueur 2 calcule son espérance de gain, pour un 'd' donné que lance le joueur 1, de la manière suivante:\\
+    EG2(j,i)=$\sum_{k=1}^{6d} {P(d,k)EG1(j,i+k)}$ .\\
+    Les deux joeurs jouent de façon optimale, la même table est utilisée, et donc le joueur 1 
+    est en mesure de calculer EG2 et de joueur de façon à minimiser cet espérance. On aura donc : \\
+    EG1(i,j) = - min (EG2(j,i)) = - min($\sum_{k=1}^{6d} {P(d,k)EG(j,i+k)}$) \\
+    \underline{Initialisation:}\\
+    Si on est dans un état où $i \ge N$ alors soit il a gagné ( $i \ge j$ ), soit il a perdu ( $i \le j$ ), soit la partie est nulle ( i = j ). \\
+    $$
+\ EG(i,j) = \left\{
+    \begin{array}{ll}
+        1 & \mbox{si  } i>j, i\ge N \\
+        -1 & \mbox{si } i<j, j\ge N  \\
+        0 & \mbox{si  } i=j, i\ge N 
+    \end{array}
+\right.
+$$
+    \paragraph{\large{La stratégie optimale: }} \\
+    Cette approche permet de trouver la stratégie optimale dans chaque état. Il suffit, lors du calcul 
+    de l'espérance de gain, de sauvegarder le nombre de dés 'd' permettant d'obtenir ce résultat. 
+    \paragraph{\large{Difficulté possible: }}
+    Si on supposait que le nombre de points marqués est 0 (et non plus 1) si on obtient au moins un 1, 
+    les points cumulés par les joueurs risquent à ne pas changer pendant plusieurs tours. C'est à dire,
+    l'algorithme reste dans un état (i,j), et ça pour une durée indéterminée, voir à l'infinie. Donc l'algorithme risque à ne pas se terminer.
+    
+    \section{Mise en oeuvre}
+    \paragraph{\large{Implémentation: }} \\
+    \underline{Stratégie aveugle:}\\
+    Il s'agit de retourner le 'd' qui maximise la fonction de l'espérance.\\
+    \underline{Stratégie optimale:}\\
+    En plus de la table EG, la fonction retourne une table 'strat' de même dimension qui donne 
+    le nombre de dés optimal à jouer dans chaque état.\\ 
+    \underline{Stratégie aléatoire:}\\
+    On implémente de plus une stratégie aléatoire qui retoune aléatoirement un nombre entre 1 et D de dés à jouer. \\
+    \paragraph{\large{Evaluation: }}\\
+    On calcule l'espérance de gain :\\
+    \underline{En variant N: } on fixe D à une valeur passée en argument (ici D=10),et pour 
+    chaque valeur de N, on simule plusieurs parties et on compte le gain du joueur 1 et joueur 2.\\ 
+    
+    \subfloat{{\includegraphics[width=7cm]{Na_a.png} }}%
+    \qquad
+    \subfloat{{\includegraphics[width=7cm]{Na_o.png} }}%
+    \\[1em]
+    \subfloat{{\includegraphics[width=7cm]{No_o.png} }}%
+    \qquad
+    \subfloat{{\includegraphics[width=7cm]{No_a.png} }}%
+    \\[1em]
+    \subfloat{{\includegraphics[width=7cm]{Na_r.png} }}%
+    \qquad
+    \subfloat{{\includegraphics[width=7cm]{Nr_o.png} }}%
+
+    \\[1.5em]
+    \underline{En variant D: } on fixe N à une valeur passée en argument (ici N=50),et pour 
+    chaque valeur de D, on simule plusieurs parties et on compte le gain du joueur 1 et joueur 2.\\[1.5em]
+  
+  \end{large}
   
 
+  {\let\clearpage\relax \chapter{Variante Simultanée}} 
+  \section{Jeu en un coup}
+  \section{Cas général}
   \end{document}
