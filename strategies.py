@@ -520,36 +520,39 @@ def strategieSimultane(D):
 
 
 
-def test_S_vs_A(D):
+def test_S_vs_A(Dmax):
     """
     Evaluation de l'espérance de gain 
     """
-    G1=0
-    G2=0
-    for i in range(100):
-        d1=strategieSimultane(D)#nb des du joueur 1
-        d2=strategieAveugle(D)#nb des du joueur 2
-        g1=0
-        for k in range (d1):
-            r=randint(1,6)
-            if (r == 1):
-                g=1
-                break
+    G1=[0]*Dmax
+    G2=[0]*Dmax
+    for D in range(1,Dmax+1):
+        for i in range(100):
+            d1=strategieSimultane(D)#nb des du joueur 1
+            d2=strategieAveugle(D)#nb des du joueur 2
+            g1=0
+            for k in range (d1):
+                r=randint(1,6)
+                if (r == 1):
+                    g=1
+                    break
+                else:
+                    g1+=r
+            g2=0
+            for k in range (d2):
+                r=randint(1,6)
+                if (r == 1):
+                    g2=1
+                    break
+                else:
+                    g2+=r
+            if(g1>g2):
+                G1[D-1]+=1
             else:
-                g1+=r
-        g2=0
-        for k in range (d2):
-            r=randint(1,6)
-            if (r == 1):
-                g2=1
-                break
-            else:
-                g2+=r
-        if(g1>g2):
-            G1+=1
-        else:
-            G2+=1
-    return(G1/100, G2/100)
+                G2[D-1]+=1
+        G1[D-1]=G1[D-1]/100
+        G2[D-1]=G2[D-1]/100
+    return G1, G2
 
 #================================== VARIANTE SIMULTANÉE GÉNÉRALE  
 

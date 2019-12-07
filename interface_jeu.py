@@ -12,7 +12,7 @@ import strategies as st
 
 #============== Contre Ordinateur
 
-N=50
+N=100
 D=5
 inst="TRY TO REACH "+str(N)+" POINTS FIRST!" 
 score_val=0
