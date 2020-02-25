@@ -13,14 +13,15 @@ import matplotlib.pyplot as plt
 N=50
 D=10
 
+"""
 #_____________Prg Dynamique Séquentielle
-#P=st.constructionMatrice_P(D)
-#tab,strat=st.constructionTableDynamique(N,D,P)
+P=st.constructionMatrice_P(D)
+tab,strat=st.constructionTableDynamique(N,D,P)
 
 #print(strat)
-#print(st.strategieAveugle(D))
-#print(st.strategieOptimale(80,3,strat)) 
-
+print("Aveugle : d=",st.strategieAveugle(D))
+print("Optimale : d=" ,st.strategieOptimale(N,D,strat)) 
+"""
 #_____________Simulation Séquentielle
 #print(st.simulation(N,D))
 """  Graphes
@@ -111,9 +112,10 @@ plt.show()
 print(t)
 """
 #_____________Prg linéaire Simultanée
-#EG=st.constructionEG(D,P)
-#print(st.resolutionPL(D,EG))
-
+"""
+EG=st.constructionEG(D,P)
+print(st.resolutionPL(D,EG))
+"""
 """__Graphe  """
 
 """
@@ -128,31 +130,12 @@ plt.plot(x,t2,"o--", color='fuchsia',label="joeur2 aveugle")
 plt.legend()
 plt.show()
 """
-
 #_____________Simulation Simultanée
 #g1,g2=st.test_S_vs_A(D)
 #print("Esperance du gain Joeur 1 (optimale) :",g1, ". Esperance du gain Joeur 2 (aveugle) :",g2)
 
 
 #_____________Prg Dynamique Simultanée
-#EG2,strat=st.construction_EG_General(N,D,P)
+EG2,strat=st.construction_EG_General(N,D,P)
 evalEG=st.calculEsperanceGainGeneral_N(D)
-plt.xlabel('Nombre de points à atteindre : N')
-plt.ylabel('Espérance de Gain ')
-plt.title("Optimale vs Optimale")
-plt.plot([5,25,45,65,85,105,125,145],evalEG[0])
-plt.show()
-
-plt.xlabel('Nombre de points à atteindre : N')
-plt.ylabel('Espérance de Gain ')
-plt.title("Optimale vs Aveugle")
-plt.plot([5,25,45,65,85,105,125,145],evalEG[1])
-plt.show()
-
-
-plt.xlabel('Nombre de points à atteindre : N')
-plt.ylabel('Espérance de Gain ')
-plt.title("Optimale vs Optimale Séquantielle")
-plt.plot([5,25,45,65,85,105,125,145],evalEG[2])
-plt.show()
-#print(evalEG)
+print(evalEG)
