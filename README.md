@@ -10,5 +10,11 @@ l’interêt de chauqe joueur, et les possibilités d’un equilibre.
 Ce domaine, ayant l’apparence d’un thème restreint, se conforme rapidement
 à des problèmes d’une grande complexité.
 Le but de ce projet est d’etudier les stratégies possibles pour le jeu ( Dice-
-Battle) : stratégie aveugle, stratégie optimale avec la programmation dynamique et uen stratégie aléatoire; de comparer expérimentalement ces stratégie et à la fin, d’introduire
+Battle) : stratégie aveugle, stratégie optimale avec la programmation dynamique et une stratégie aléatoire; de comparer expérimentalement ces stratégie et à la fin, d’introduire
 une interface permettant de jouer contre l’ordinateur ou un humain.
+
+
+
+
+### Abstract:
+In this project, we study differents stratégies for a game (Dice battle) : a blind strategy, a random starategy and a strategy using dunamic programming and lineair programming. We compare these strategies and evaluate them. Finally, we implement an interfac to play against the computer or other players.
